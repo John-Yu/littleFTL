@@ -4,7 +4,7 @@
 
 
 
-  This is an experimental project to quickly realize the feasibility of an FTL based on the core technology of  littleFS .
+  This is an experimental project to quickly realize the feasibility of an FTL based on the core technology of  [littleFS](https://github.com/John-Yu/littleFS) .
 
   It took about 10 minutes from conception to implementation. So the code looks rough, but the experimental results are satisfactory.
 
@@ -23,4 +23,5 @@ Because of the core technology based on littleFS, littleFTL is born with the adv
 3. wear levelling
 
 **Test**
-Use VS2017 , open test.sln .
+
+ Use VS2017 , open test.sln .

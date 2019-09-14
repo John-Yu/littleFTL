@@ -386,10 +386,6 @@ typedef struct lfs {
     lfs_size_t name_max;
     lfs_size_t file_max;
     lfs_size_t attr_max;
-
-#ifdef LFS_MIGRATE
-    struct lfs1 *lfs1;
-#endif
 } lfs_t;
 
 
@@ -419,60 +415,6 @@ int lfs_mount(lfs_t *lfs, const struct lfs_config *config);
 // Does nothing besides releasing any allocated resources.
 // Returns a negative error code on failure.
 int lfs_unmount(lfs_t *lfs);
-
-/// General operations ///
-
-// Removes a file or directory
-//
-// If removing a directory, the directory must be empty.
-// Returns a negative error code on failure.
-int lfs_remove(lfs_t *lfs, const char *path);
-
-// Rename or move a file or directory
-//
-// If the destination exists, it must match the source in type.
-// If the destination is a directory, the directory must be empty.
-//
-// Returns a negative error code on failure.
-int lfs_rename(lfs_t *lfs, const char *oldpath, const char *newpath);
-
-// Find info about a file or directory
-//
-// Fills out the info structure, based on the specified file or directory.
-// Returns a negative error code on failure.
-int lfs_stat(lfs_t *lfs, const char *path, struct lfs_info *info);
-
-// Get a custom attribute
-//
-// Custom attributes are uniquely identified by an 8-bit type and limited
-// to LFS_ATTR_MAX bytes. When read, if the stored attribute is smaller than
-// the buffer, it will be padded with zeros. If the stored attribute is larger,
-// then it will be silently truncated. If no attribute is found, the error
-// LFS_ERR_NOATTR is returned and the buffer is filled with zeros.
-//
-// Returns the size of the attribute, or a negative error code on failure.
-// Note, the returned size is the size of the attribute on disk, irrespective
-// of the size of the buffer. This can be used to dynamically allocate a buffer
-// or check for existance.
-lfs_ssize_t lfs_getattr(lfs_t *lfs, const char *path,
-        uint8_t type, void *buffer, lfs_size_t size);
-
-// Set custom attributes
-//
-// Custom attributes are uniquely identified by an 8-bit type and limited
-// to LFS_ATTR_MAX bytes. If an attribute is not found, it will be
-// implicitly created.
-//
-// Returns a negative error code on failure.
-int lfs_setattr(lfs_t *lfs, const char *path,
-        uint8_t type, const void *buffer, lfs_size_t size);
-
-// Removes a custom attribute
-//
-// If an attribute is not found, nothing happens.
-//
-// Returns a negative error code on failure.
-int lfs_removeattr(lfs_t *lfs, const char *path, uint8_t type);
 
 
 /// File operations ///
@@ -561,53 +503,6 @@ int lfs_file_rewind(lfs_t *lfs, lfs_file_t *file);
 lfs_soff_t lfs_file_size(lfs_t *lfs, lfs_file_t *file);
 
 
-/// Directory operations ///
-
-// Create a directory
-//
-// Returns a negative error code on failure.
-int lfs_mkdir(lfs_t *lfs, const char *path);
-
-// Open a directory
-//
-// Once open a directory can be used with read to iterate over files.
-// Returns a negative error code on failure.
-int lfs_dir_open(lfs_t *lfs, lfs_dir_t *dir, const char *path);
-
-// Close a directory
-//
-// Releases any allocated resources.
-// Returns a negative error code on failure.
-int lfs_dir_close(lfs_t *lfs, lfs_dir_t *dir);
-
-// Read an entry in the directory
-//
-// Fills out the info structure, based on the specified file or directory.
-// Returns a positive value on success, 0 at the end of directory,
-// or a negative error code on failure.
-int lfs_dir_read(lfs_t *lfs, lfs_dir_t *dir, struct lfs_info *info);
-
-// Change the position of the directory
-//
-// The new off must be a value previous returned from tell and specifies
-// an absolute offset in the directory seek.
-//
-// Returns a negative error code on failure.
-int lfs_dir_seek(lfs_t *lfs, lfs_dir_t *dir, lfs_off_t off);
-
-// Return the position of the directory
-//
-// The returned offset is only meant to be consumed by seek and may not make
-// sense, but does indicate the current position in the directory iteration.
-//
-// Returns the position of the directory, or a negative error code on failure.
-lfs_soff_t lfs_dir_tell(lfs_t *lfs, lfs_dir_t *dir);
-
-// Change the position of the directory to the beginning of the directory
-//
-// Returns a negative error code on failure.
-int lfs_dir_rewind(lfs_t *lfs, lfs_dir_t *dir);
-
 
 /// Filesystem-level filesystem operations
 
@@ -627,22 +522,6 @@ lfs_ssize_t lfs_fs_size(lfs_t *lfs);
 //
 // Returns a negative error code on failure.
 int lfs_fs_traverse(lfs_t *lfs, int (*cb)(void*, lfs_block_t), void *data);
-
-#ifdef LFS_MIGRATE
-// Attempts to migrate a previous version of littlefs
-//
-// Behaves similarly to the lfs_format function. Attempts to mount
-// the previous version of littlefs and update the filesystem so it can be
-// mounted with the current version of littlefs.
-//
-// Requires a littlefs object and config struct. This clobbers the littlefs
-// object, and does not leave the filesystem mounted. The config struct must
-// be zeroed for defaults and backwards compatibility.
-//
-// Returns a negative error code on failure.
-int lfs_migrate(lfs_t *lfs, const struct lfs_config *cfg);
-#endif
-
 
 #ifdef __cplusplus
 } /* extern "C" */

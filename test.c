@@ -121,7 +121,6 @@ static void shuffle(int seed)
 	for (i = NUM_SECTORS - 1; i > 0; i--) {
 		const int j = rand() % i;
 		const int tmp = sector_list[i];
-
 		sector_list[i] = sector_list[j];
 		sector_list[j] = tmp;
 	}
