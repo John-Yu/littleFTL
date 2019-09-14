@@ -21,3 +21,6 @@ Because of the core technology based on littleFS, littleFTL is born with the adv
 1. low memory footprint
 2. power loss protection
 3. wear levelling
+
+**Test**
+Use VS2017 , open test.sln .
