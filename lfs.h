@@ -472,36 +472,6 @@ lfs_ssize_t lfs_file_read(lfs_t *lfs, lfs_file_t *file,
 lfs_ssize_t lfs_file_write(lfs_t *lfs, lfs_file_t *file,
         const void *buffer, lfs_size_t size);
 
-// Change the position of the file
-//
-// The change in position is determined by the offset and whence flag.
-// Returns the new position of the file, or a negative error code on failure.
-lfs_soff_t lfs_file_seek(lfs_t *lfs, lfs_file_t *file,
-        lfs_soff_t off, int whence);
-
-// Truncates the size of the file to the specified size
-//
-// Returns a negative error code on failure.
-int lfs_file_truncate(lfs_t *lfs, lfs_file_t *file, lfs_off_t size);
-
-// Return the position of the file
-//
-// Equivalent to lfs_file_seek(lfs, file, 0, LFS_SEEK_CUR)
-// Returns the position of the file, or a negative error code on failure.
-lfs_soff_t lfs_file_tell(lfs_t *lfs, lfs_file_t *file);
-
-// Change the position of the file to the beginning of the file
-//
-// Equivalent to lfs_file_seek(lfs, file, 0, LFS_SEEK_SET)
-// Returns a negative error code on failure.
-int lfs_file_rewind(lfs_t *lfs, lfs_file_t *file);
-
-// Return the size of the file
-//
-// Similar to lfs_file_seek(lfs, file, 0, LFS_SEEK_END)
-// Returns the size of the file, or a negative error code on failure.
-lfs_soff_t lfs_file_size(lfs_t *lfs, lfs_file_t *file);
-
 
 
 /// Filesystem-level filesystem operations
