@@ -36,7 +36,7 @@ char path[1024];
 #endif
 
 #ifndef LFS_BLOCK_CYCLES
-#define LFS_BLOCK_CYCLES 1024
+#define LFS_BLOCK_CYCLES 100
 #endif
 
 #ifndef LFS_CACHE_SIZE
@@ -158,6 +158,12 @@ int main(void) {
 		}
 		printf("\n");
 		//*/
+		// test wear levelling
+		for (int i = 0; i < 1000; i++)
+		{
+			lftl_map_write(13, wbuffer);
+		}
+
 		printf("Print the map ...\n");
 		for (int i = 0; i < NUM_SECTORS; i++) {
 			uint32_t local_block;
