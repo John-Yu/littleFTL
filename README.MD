@@ -8,7 +8,7 @@
 
   It took about 10 minutes from conception to implementation. So the code looks rough, but the experimental results are satisfactory.
 
-  Thanks to the compact design of the metadata pair, the entire index area occupies very little FLASH space, which brings two benefits.
+  Thanks to the compact design of the metadata pair, the entire index area occupies very small FLASH space, which brings two benefits.
 
 1. High space utilization rate
 
